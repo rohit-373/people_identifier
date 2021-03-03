@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="389ec21c-1d14-4b23-98ca-b8b2e3cc127e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/hallticket.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/image_recognition.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_recognition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interview.pdf" beforeDir="false" />
-    </list>
+    <list default="true" id="389ec21c-1d14-4b23-98ca-b8b2e3cc127e" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,12 +18,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1pEQIw3ltKY5r16asp3o6vZW7IH" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -92,6 +91,14 @@
       <option name="presentableId" value="Default" />
       <updated>1614745695740</updated>
     </task>
+    <task id="LOCAL-00001" summary="made it neater">
+      <created>1614750460207</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1614750460208</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -104,5 +111,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="made it neater" />
+    <option name="LAST_COMMIT_MESSAGE" value="made it neater" />
   </component>
 </project>
