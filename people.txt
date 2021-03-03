@@ -1,1 +1,2 @@
-raji matches
+person, hall_ticket_matches_college_id, hall_ticket_matches_interview
+raji,True,Trueraji,True,Trueraji,True,Trueraji,True,True

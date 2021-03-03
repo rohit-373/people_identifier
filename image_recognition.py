@@ -1,82 +1,58 @@
+import os
 import cv2
 import face_recognition as fr
 from pdf2image import convert_from_path
-import os
 
-entries = os.listdir('person\'s_details/')
 temp = []
 results = 0
+f = open("people.txt", "a")
+college_id_image_encoding = None
+hall_ticket_image_encoding = None
+entries = os.listdir("person\'s_details/")
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
-for entry in entries:
-    f = open("people.txt", "a")
-
-    images = convert_from_path(f"person's_details/{entry}/hallticket.pdf",
-                               poppler_path='Release-21.02.0/poppler-21.02.0/Library/bin')
-    for i in range(len(images)):
-        images[i].save(f'images/page{i}.jpg', 'JPEG')
-        image = cv2.imread(f'images/page{i}.jpg', -1)
-        cascade = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-        face_cascade = cv2.CascadeClassifier(cascade)
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-        for (x, y, w, h) in faces:
+for candidate_name in entries:
+    pages = convert_from_path(f"person's_details/{candidate_name}/hall_ticket.pdf")
+    for index, page in enumerate(pages):
+        page.save(f"person's_details/{candidate_name}/page.jpg", "JPEG")
+        img = cv2.imread(f"person's_details/{candidate_name}/page.jpg", 0)
+        for (x, y, w, h) in face_cascade.detectMultiScale(img, 1.3, 5):
             try:
-                cv2.imwrite('images/hallticket.jpg', image[y - 30:y + h + 30, x - 30:x + w + 30])
+                hall_ticket_image = cv2.cvtColor(img[y - 30:y + h + 30, x - 30:x + w + 30], cv2.COLOR_GRAY2RGB)
+                hall_ticket_image_encoding = fr.face_encodings(hall_ticket_image)
+                cv2.imwrite(f"person's_details/{candidate_name}/hall_ticket.jpg", hall_ticket_image)
             except:
                 continue
 
-    images = convert_from_path(f"person's_details/{entry}/collegeid.pdf",
-                               poppler_path='Release-21.02.0/poppler-21.02.0/Library/bin')
-    for i in range(len(images)):
-        images[i].save(f'images/page{i}.jpg', 'JPEG')
-        image = cv2.imread(f'images/page{i}.jpg', -1)
-        cascade = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-        face_cascade = cv2.CascadeClassifier(cascade)
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-        for (x, y, w, h) in faces:
+    pages = convert_from_path(f"person's_details/{candidate_name}/college_id.pdf")
+    for index, page in enumerate(pages):
+        page.save(f"person's_details/{candidate_name}/page.jpg", "JPEG")
+        img = cv2.imread(f"person's_details/{candidate_name}/page.jpg", 0)
+        for (x, y, w, h) in face_cascade.detectMultiScale(img, 1.3, 5):
             try:
-                cv2.imwrite('images/collegeid.jpg', image[y - 30:y + h + 30, x - 30:x + w + 30])
+                college_id_image = cv2.cvtColor(img[y - 30:y + h + 30, x - 30:x + w + 30], cv2.COLOR_GRAY2RGB)
+                college_id_image_encoding = fr.face_encodings(college_id_image)[0]
+                cv2.imwrite(f"person's_details/{candidate_name}/college_id.jpg", college_id_image)
             except:
                 continue
 
-    images = convert_from_path(f"person's_details/{entry}/interview.pdf",
-                               poppler_path='Release-21.02.0/poppler-21.02.0/Library/bin')
-    for i in range(len(images)):
-        images[i].save(f'images/page{i}.jpg', 'JPEG')
-        image = cv2.imread(f'images/page{i}.jpg', -1)
-        cascade = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-        face_cascade = cv2.CascadeClassifier(cascade)
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-        j = 0
-        for (x, y, w, h) in faces:
-            j += 1
-            try:
-                cv2.imwrite(f'images/face{j}.jpg', image[y - 30:y + h + 30, x - 30:x + w + 30])
-                temp.append(f'images/face{j}.jpg')
-            except:
-                continue
+    if fr.compare_faces(hall_ticket_image_encoding, college_id_image_encoding)[0]:
+        pages = convert_from_path(f"person's_details/{candidate_name}/interview.pdf")
+        for index, page in enumerate(pages):
+            page.save(f"person's_details/{candidate_name}/page.jpg", "JPEG")
+            img = cv2.imread(f"person's_details/{candidate_name}/page.jpg", 0)
+            for i, (x, y, w, h) in enumerate(face_cascade.detectMultiScale(img, 1.3, 5)):
+                try:
+                    unknown_image = cv2.cvtColor(img[y - 30:y + h + 30, x - 30:x + w + 30], cv2.COLOR_GRAY2RGB)
+                    unknown_encoding = fr.face_encodings(unknown_image)[0]
+                    cv2.imwrite(f"person's_details/{candidate_name}/interview_faces_{i + 1}.jpg", unknown_image)
+                    results += fr.compare_faces(hall_ticket_image_encoding, unknown_encoding)[0]
+                except:
+                    continue
 
-    hallticket_image = cv2.imread("images/hallticket.jpg")
-    hallticket_image = cv2.cvtColor(hallticket_image, cv2.COLOR_BGR2RGB)
-    hallticket_image_encoding = fr.face_encodings(hallticket_image)
-
-    collegeid_image = cv2.imread("images/collegeid.jpg")
-    collegeid_image = cv2.cvtColor(collegeid_image, cv2.COLOR_BGR2RGB)
-    collegeid_image_encoding = fr.face_encodings(collegeid_image)[0]
-
-    if fr.compare_faces(hallticket_image_encoding, collegeid_image_encoding)[0]:
-        for i in temp:
-            unknown_image = cv2.imread(i)
-            unknown_image = cv2.cvtColor(unknown_image, cv2.COLOR_BGR2RGB)
-            unknown_encoding = fr.face_encodings(unknown_image)[0]
-
-            results += fr.compare_faces(hallticket_image_encoding, unknown_encoding)[0]
-        if results:
-            f.write(entry+' matches')
-        else:
-            f.write(entry + ' not_matches')
+        f.write(','.join([candidate_name, 'True', str(bool(results))]))
     else:
-        f.write(entry + ' not_matches')
-    f.close()
+        f.write(','.join([candidate_name, 'False', 'NA']))
+    os.remove(f"person's_details/{candidate_name}/page.jpg")
+
+f.close()
